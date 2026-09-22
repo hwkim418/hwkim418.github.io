@@ -431,6 +431,47 @@ P1_Incoming_01# write memory</code></pre>
       </p>
 
 
+<!-- LESSONS LEARNED -->
+
+<h2>Lessons Learned</h2>
+
+<ul>
+
+  <li>
+    A device being powered on does not necessarily mean that it is receiving
+    enough PoE power to operate with all features enabled.
+  </li>
+
+  <li>
+    Wireless symptoms that appear to be RF or controller-related may originate
+    from a Layer 1 power issue.
+  </li>
+
+  <li>
+    When the physical location of a device is unknown, the combination of
+    ARP, MAC address tables, and CDP provides a practical way to trace the
+    device from the core switch to its access switch and physical port.
+  </li>
+
+  <li>
+    Each troubleshooting command answers a different question: ARP maps an
+    IP address to a MAC address, the MAC address table identifies the path
+    toward that MAC address, and CDP identifies the neighboring Cisco device
+    connected to that path.
+  </li>
+
+  <li>
+    PoE status should be checked for actual power allocation, not simply
+    whether the interface reports that the powered device is online.
+  </li>
+
+  <li>
+    Verify the physical interface and its existing configuration before
+    making changes to PoE settings.
+  </li>
+
+</ul>
+
       <!-- BACK -->
 
       <div class="article-footer">
