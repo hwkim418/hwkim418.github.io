@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>CCTV IP Conflict Causing Intermittent Video Loss | Kim</title>
+
+  <meta
+    name="description"
+    content="A real-world troubleshooting case where a duplicate static IP address caused intermittent video loss on an IP-CCTV camera."
+  >
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+
+
+<body>
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button class="mobile-menu-button" id="menuButton">
+    ☰
+  </button>
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+      <a href="/" class="site-name">
+        KIM
+      </a>
+
+      <p class="site-description">
+        Tech Notes & Guides
+      </p>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <a href="/" class="nav-link">
+        Home
+      </a>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Linux</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Basics</a>
+          <a href="#">System Administration</a>
+          <a href="#">Troubleshooting</a>
+        </div>
+
+      </div>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Machine Learning</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Fundamentals</a>
+          <a href="#">Preprocessing</a>
+          <a href="#">Projects</a>
+        </div>
+
+      </div>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Troubleshooting Logs</span>
+        </div>
+
+        <div class="nav-submenu">
+
+          <a href="/troubleshooting/network/">
+            Network
+          </a>
+
+          <a href="/troubleshooting/server-storage/">
+            Server / Storage
+          </a>
+
+          <a href="/troubleshooting/infrastructure/">
+            Infrastructure
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <a href="#" class="nav-link">
+        About
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="content">
+
+    <article class="article">
+
+
+      <!-- ARTICLE HEADER -->
+
+      <header class="article-header">
+
+        <div class="breadcrumb">
+          Troubleshooting / Network
+        </div>
+
+        <h1>
+          CCTV IP Conflict Causing Intermittent Video Loss
+        </h1>
+
+        <div class="article-meta">
+          February 15, 2026
+        </div>
+
+      </header>
+
+
+      <div class="article-tags">
+        Network · CCTV · IP Conflict · ARP · Cisco
+      </div>
+
+
+      <!-- OVERVIEW -->
+
+      <h2>Overview</h2>
+
+      <p>
+        A newly installed IP-CCTV camera experienced intermittent video loss,
+        with short, repetitive interruptions lasting approximately 5–20 seconds
+        before automatically reconnecting.
+      </p>
+
+      <p>
+        The initial suspicion was PoE instability or an NVR software issue.
+        However, the interruption pattern did not match a power-related reboot,
+        which would normally cause a longer outage, nor did it resemble a
+        sustained software malfunction.
+      </p>
+
+      <p>
+        Further investigation revealed inconsistent ARP mappings for the
+        affected IP address. The MAC address associated with the camera's IP
+        changed intermittently, indicating that multiple devices were
+        responding to the same IP address.
+      </p>
+
+
+      <div class="root-cause">
+
+        <strong>Root Cause</strong>
+
+        A newly installed CCTV camera was configured with a duplicate static
+        IP address. Two devices were responding to the same IP, causing
+        unstable ARP-to-MAC mappings and intermittent video connectivity.
+
+      </div>
+
+
+      <!-- WHY IT MATTERS -->
+
+      <h2>Why It Matters</h2>
+
+      <p>
+        IP conflicts can cause unpredictable service disruption even when the
+        physical network itself is stable.
+      </p>
+
+      <p>
+        In environments using static IP addressing, duplicate addresses can
+        result in traffic being intermittently directed to different devices
+        as ARP mappings change.
+      </p>
+
+      <ul>
+        <li>ARP entries may alternate between different MAC addresses.</li>
+        <li>Traffic may intermittently reach the wrong endpoint.</li>
+        <li>Applications may disconnect and reconnect repeatedly.</li>
+        <li>Critical systems can experience service interruptions.</li>
+      </ul>
+
+      <p>
+        In security environments, even short periods of CCTV video loss can
+        affect monitoring, evidence retention, compliance, and operational
+        safety.
+      </p>
+
+
+      <!-- ENVIRONMENT -->
+
+      <h2>Environment</h2>
+
+      <ul>
+        <li>
+          <strong>Camera Model:</strong>
+          LTS CMIP3382WI-28SDL
+        </li>
+
+        <li>
+          <strong>Camera:</strong>
+          8MP, 2.8 mm lens, IR, built-in microphone and speaker
+        </li>
+
+        <li>
+          <strong>Video:</strong>
+          8MP continuous recording
+        </li>
+
+        <li>
+          <strong>Core Switch:</strong>
+          Cisco Catalyst 9500 — Layer 3 / Inter-VLAN routing
+        </li>
+
+        <li>
+          <strong>CCTV Access Switch:</strong>
+          Cisco Catalyst 9200L PoE+
+        </li>
+
+        <li>
+          <strong>Edge Switch:</strong>
+          Production-floor PoE switch supplying camera power
+        </li>
+
+        <li>
+          <strong>Network Flow:</strong>
+          C9500 Core → C9200L CCTV Access → IDF PoE Switch → IP Camera
+        </li>
+
+        <li>
+          <strong>Issue Type:</strong>
+          Duplicate static IP / ARP instability
+        </li>
+
+        <li>
+          <strong>Impact:</strong>
+          Intermittent CCTV video loss
+        </li>
+      </ul>
+
+
+      <!-- TROUBLESHOOTING PROCESS -->
+
+      <h2>Troubleshooting Process</h2>
+
+
+      <h3>1. Verify ARP Stability</h3>
+
+      <p>
+        The investigation began at the Layer 3 core switch by checking the
+        ARP entry for the affected camera's IP address.
+      </p>
+
+      <pre><code>C9500_BB# show arp | include 192.168.50.45</code></pre>
+
+      <p>
+        The MAC address associated with the target IP changed intermittently.
+        This was abnormal for a fixed CCTV endpoint and indicated a possible
+        duplicate IP address.
+      </p>
+
+      <p>
+        The MAC address table was then checked to determine where the
+        associated MAC addresses were being learned.
+      </p>
+
+      <pre><code>C9500_BB# show mac address-table address xxxx.xxxx.xxxx</code></pre>
+
+      <p>
+        MAC entries appeared on different network paths over time, providing
+        additional evidence that the IP address was not consistently associated
+        with a single endpoint.
+      </p>
+
+
+      <h3>2. Trace the Downstream Switch</h3>
+
+      <p>
+        The Layer 2 path was traced downstream from the core switch toward
+        the production-floor IDF switch.
+      </p>
+
+      <pre><code>C9500_BB# show cdp neighbors</code></pre>
+
+      <p>
+        After accessing the IDF switch, the MAC address table was checked
+        again.
+      </p>
+
+      <pre><code>IDF_SW# show mac address-table | include xxxx.xxxx.xxxx</code></pre>
+
+      <p>
+        The investigation confirmed abnormal MAC behavior across the network
+        path, supporting the duplicate-IP hypothesis.
+      </p>
+
+
+      <h3>3. Confirm the IP Conflict</h3>
+
+      <p>
+        Advanced IP Scanner was used to verify which devices were responding
+        to the affected IP address.
+      </p>
+
+      <p>
+        Two devices were found responding to:
+      </p>
+
+      <pre><code>192.168.50.45</code></pre>
+
+      <p>
+        This confirmed the IP conflict.
+      </p>
+
+      <p>
+        The newly installed CCTV camera had been configured with a static IP
+        address that was already assigned to another device.
+      </p>
+
+
+      <!-- RESOLUTION -->
+
+      <h2>Resolution</h2>
+
+      <p>
+        A new, unused IP address was assigned to the duplicate device,
+        eliminating the address conflict.
+      </p>
+
+      <p>
+        The ARP cache was then cleared so that the network could relearn the
+        correct IP-to-MAC mapping.
+      </p>
+
+      <pre><code>C9500# clear arp</code></pre>
+
+      <p>
+        The ARP table was checked again to verify that the affected IP address
+        remained consistently mapped to the expected MAC address.
+      </p>
+
+      <pre><code>C9500_BB# show arp | include 192.168.50.45</code></pre>
+
+      <p>
+        Video connectivity was monitored after the change. The ARP entry
+        remained stable and no further video interruptions were observed.
+      </p>
+
+
+      <!-- LESSONS LEARNED -->
+
+      <h2>Lessons Learned</h2>
+
+      <ul>
+
+        <li>
+          Check ARP table stability early when troubleshooting intermittent
+          connectivity involving statically addressed devices.
+        </li>
+
+        <li>
+          A changing MAC address for a fixed IP address can be a strong
+          indicator of a duplicate IP configuration.
+        </li>
+
+        <li>
+          Static IP environments require careful IP address management and
+          documentation to prevent address duplication.
+        </li>
+
+        <li>
+          Short, repetitive service interruptions do not necessarily indicate
+          a physical-layer or PoE problem.
+        </li>
+
+        <li>
+          Combining Layer 3 ARP information with Layer 2 MAC address-table
+          tracing can help isolate the physical location of conflicting
+          endpoints.
+        </li>
+
+      </ul>
+
+
+      <!-- BACK -->
+
+      <div class="article-footer">
+
+        <a href="/troubleshooting/network/">
+          ← Back to Network Troubleshooting
+        </a>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <!-- MOBILE SIDEBAR -->
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const sidebar = document.getElementById("sidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+
+</html>
