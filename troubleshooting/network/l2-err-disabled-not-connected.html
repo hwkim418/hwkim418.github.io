@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>L2 Interface Err-Disabled Causing False "Not Connected" Status | Kim</title>
+
+  <meta
+    name="description"
+    content="A real-world Cisco troubleshooting case where an upstream switch showed a not connected status while the downstream switch interface was actually err-disabled."
+  >
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+
+
+<body>
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button class="mobile-menu-button" id="menuButton">
+    ☰
+  </button>
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+      <a href="/" class="site-name">
+        KIM
+      </a>
+
+      <p class="site-description">
+        Tech Notes & Guides
+      </p>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <a href="/" class="nav-link">
+        Home
+      </a>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Linux</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Basics</a>
+          <a href="#">System Administration</a>
+          <a href="#">Troubleshooting</a>
+        </div>
+
+      </div>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Machine Learning</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Fundamentals</a>
+          <a href="#">Preprocessing</a>
+          <a href="#">Projects</a>
+        </div>
+
+      </div>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Troubleshooting Logs</span>
+        </div>
+
+        <div class="nav-submenu">
+
+          <a href="/troubleshooting/network/">
+            Network
+          </a>
+
+          <a href="/troubleshooting/server-storage/">
+            Server / Storage
+          </a>
+
+          <a href="/troubleshooting/infrastructure/">
+            Infrastructure
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <a href="#" class="nav-link">
+        About
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="content">
+
+    <article class="article">
+
+
+      <!-- ARTICLE HEADER -->
+
+      <header class="article-header">
+
+        <div class="breadcrumb">
+          Troubleshooting / Network
+        </div>
+
+        <h1>
+          L2 Interface Err-Disabled Causing False "Not Connected" Status
+        </h1>
+
+        <div class="article-meta">
+          February 20, 2026
+        </div>
+
+      </header>
+
+
+      <div class="article-tags">
+        Network · Cisco · Err-Disabled · Layer 2 · Switching
+      </div>
+
+
+      <!-- OVERVIEW -->
+
+      <h2>Overview</h2>
+
+      <p>
+        A downstream Cisco access switch, referred to as Switch_A, suddenly
+        became unreachable over the network.
+      </p>
+
+      <p>
+        SSH and Telnet access failed, and the corresponding interface on the
+        upstream switch, Switch_B, displayed a <code>notconnect</code> status.
+        From the upstream perspective, the link appeared to be physically down.
+      </p>
+
+      <p>
+        Because both sides appeared disconnected, the initial symptoms pointed
+        toward a possible Layer 1 issue such as a disconnected or damaged cable.
+        Further investigation, however, showed that the actual condition was
+        different.
+      </p>
+
+
+      <!-- ROOT CAUSE -->
+
+      <div class="root-cause">
+
+        <strong>Root Cause</strong>
+
+        <p>
+          Direct console access to the downstream switch revealed that its
+          uplink interface was in an <code>err-disabled</code> state.
+          The upstream <code>notconnect</code> status therefore appeared to be
+          a physical disconnection even though the downstream interface had
+          actually been disabled.
+        </p>
+
+        <p>
+          No persistent BPDU Guard or port-security violation logs were found.
+          A brief facility power fluctuation occurred around the same time and
+          was considered a possible contributing factor, but the exact trigger
+          for the err-disabled condition was not conclusively established.
+        </p>
+
+      </div>
+
+
+      <!-- WHY IT MATTERS -->
+
+      <h2>Why It Matters</h2>
+
+      <p>
+        A <code>notconnect</code> status can easily lead troubleshooting toward
+        cabling, connectors, patch panels, or hardware replacement.
+      </p>
+
+      <p>
+        In this case, the upstream symptoms resembled a Layer 1 failure, while
+        direct inspection of the downstream switch revealed an
+        <code>err-disabled</code> interface.
+      </p>
+
+      <p>
+        The outage also affected devices connected through the downstream
+        switch. The associated wireless access point went offline, resulting
+        in communication instability for nearby Production of Point (POP)
+        data-collection bridges and loss of real-time POP data.
+      </p>
+
+
+      <!-- ENVIRONMENT -->
+
+      <h2>Environment</h2>
+
+      <ul>
+
+        <li>
+          <strong>Core / Backbone:</strong>
+          Cisco Catalyst 9500 16X 10G
+        </li>
+
+        <li>
+          <strong>Access Switch:</strong>
+          Cisco Catalyst 9200L 24 PoE+
+        </li>
+
+        <li>
+          <strong>Topology:</strong>
+          Switch_B (uplink) ↔ Switch_A (downstream access switch)
+        </li>
+
+        <li>
+          <strong>Physical Layout:</strong>
+          Jump-to-jump / patch-to-patch cabling
+        </li>
+
+        <li>
+          <strong>Issue Type:</strong>
+          Interface err-disabled
+        </li>
+
+        <li>
+          <strong>Impact:</strong>
+          Complete isolation of the downstream switch and connected AP
+        </li>
+
+        <li>
+          <strong>Operational Impact:</strong>
+          Loss of real-time POP data
+        </li>
+
+      </ul>
+
+
+      <!-- TROUBLESHOOTING PROCESS -->
+
+      <h2>Troubleshooting Process</h2>
+
+
+      <!-- STEP 1 -->
+
+      <h3>1. Verify Interface Status on the Upstream Switch</h3>
+
+      <p>
+        The investigation began on Switch_B by checking the interface connected
+        toward the unreachable downstream switch.
+      </p>
+
+      <pre><code>Switch_B# show interface status | include Gi1/0/21</code></pre>
+
+      <p><strong>Observed output:</strong></p>
+
+      <pre><code>Gi1/0/21  Uplink  notconnect  1  auto  auto  10/100/1000BaseTX</code></pre>
+
+      <p>
+        <strong>What to look for:</strong>
+        Check the interface status and determine whether the switch sees an
+        active physical link.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        Switch_B reported <code>notconnect</code>. At this stage, the problem
+        appeared consistent with a physical Layer 1 disconnection.
+      </p>
+
+      <p>
+        However, <code>notconnect</code> only describes what the upstream
+        interface currently sees. Further validation was necessary before
+        replacing cables or hardware.
+      </p>
+
+
+      <!-- STEP 2 -->
+
+      <h3>2. Review the Upstream Interface Configuration</h3>
+
+      <p>
+        The interface configuration on Switch_B was reviewed to verify the
+        expected uplink configuration.
+      </p>
+
+      <pre><code>Switch_B# show run interface Gi1/0/21</code></pre>
+
+      <p><strong>Observed configuration:</strong></p>
+
+      <pre><code>interface Gi1/0/21
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30</code></pre>
+
+      <p>
+        <strong>What to look for:</strong>
+        Confirm that the interface is configured for its intended role and
+        review the trunk configuration before assuming that configuration is
+        responsible for the outage.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The upstream interface was configured as a trunk with the expected
+        allowed VLANs. The next step was to inspect the downstream switch
+        directly.
+      </p>
+
+
+      <!-- STEP 3 -->
+
+      <h3>3. Access the Downstream Switch Through the Console</h3>
+
+      <p>
+        Switch_A could not be reached through SSH or Telnet because its uplink
+        connectivity was unavailable.
+      </p>
+
+      <p>
+        A direct console connection was therefore established to inspect the
+        downstream switch locally.
+      </p>
+
+      <pre><code>Switch_A# show interface status | include Gi1/0/24</code></pre>
+
+      <p><strong>Observed output:</strong></p>
+
+      <pre><code>Gi1/0/24  Uplink_to_Switch_B  err-disabled  trunk  auto  auto  10/100/1000BaseTX</code></pre>
+
+      <p>
+        <strong>What to look for:</strong>
+        Check the local status of the downstream uplink instead of relying only
+        on the status reported by the upstream switch.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        This was the critical finding. The downstream uplink was not simply
+        disconnected; the interface was in an <code>err-disabled</code> state.
+      </p>
+
+      <p>
+        This explained why the upstream switch could show
+        <code>notconnect</code> even though the apparent Layer 1 symptom did not
+        originate from a confirmed cable failure.
+      </p>
+
+
+      <!-- STEP 4 -->
+
+      <h3>4. Verify the Physical Link</h3>
+
+      <p>
+        The connection between the switches used a jump-to-jump
+        (patch-to-patch) cabling path, so the physical link was traced
+        on-site.
+      </p>
+
+      <p>
+        A cable tester was also used to verify the path.
+      </p>
+
+      <p>
+        <strong>What to look for:</strong>
+        Verify patch connections, cable continuity, and the physical path
+        before concluding that the interface condition was caused by damaged
+        cabling.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        No physical cable fault was detected. This reduced the likelihood that
+        the upstream <code>notconnect</code> status was being caused by a
+        defective cable.
+      </p>
+
+
+      <!-- STEP 5 -->
+
+      <h3>5. Review Logs and Correlate Events</h3>
+
+      <p>
+        The switch logs were reviewed to identify the event that caused the
+        interface to enter the <code>err-disabled</code> state.
+      </p>
+
+      <pre><code>Switch_A# show logging</code></pre>
+
+      <p>
+        <strong>What to look for:</strong>
+        Search for messages associated with the affected interface and common
+        interface-protection mechanisms.
+      </p>
+
+      <p>
+        No persistent BPDU Guard or port-security violation logs were detected.
+      </p>
+
+      <p>
+        A brief facility power fluctuation occurred around the same time as the
+        outage. Based on the timing correlation, the transient power event was
+        considered a possible contributing factor.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The interface's <code>err-disabled</code> state was confirmed, but the
+        available evidence did not establish a definitive trigger. The power
+        event remained a suspected contributing factor rather than a confirmed
+        root cause.
+      </p>
+
+
+      <!-- RESOLUTION -->
+
+      <h2>Resolution</h2>
+
+      <p>
+        After the physical path had been verified and no cable fault was found,
+        the affected downstream interface was reset.
+      </p>
+
+      <pre><code>Switch_A(config)# interface Gi1/0/24
+Switch_A(config-if)# shutdown
+Switch_A(config-if)# no shutdown</code></pre>
+
+      <p>
+        The shutdown / no shutdown sequence reset the interface and allowed the
+        link to come back online.
+      </p>
+
+      <p>
+        <strong>Verification:</strong>
+        The link was successfully restored, downstream switch connectivity
+        returned, and the associated wireless access point rejoined the
+        network.
+      </p>
+
+      <p>
+        POP communication was then able to resume through the restored network
+        path.
+      </p>
+
+
+      <!-- LESSONS LEARNED -->
+
+      <h2>Lessons Learned</h2>
+
+      <ul>
+
+        <li>
+          A <code>notconnect</code> status on an upstream switch does not always
+          prove that the cable is physically disconnected or damaged.
+        </li>
+
+        <li>
+          Symptoms that initially resemble a Layer 1 failure may require
+          investigation of the downstream switch state.
+        </li>
+
+        <li>
+          When remote management is unavailable, direct console access can be
+          critical for determining the actual interface condition.
+        </li>
+
+        <li>
+          Physical cabling should still be traced and tested before assuming
+          that the problem is entirely configuration-related.
+        </li>
+
+        <li>
+          Switch logs should be reviewed before resetting an err-disabled
+          interface whenever possible, because they may identify the mechanism
+          that triggered the condition.
+        </li>
+
+        <li>
+          Timing correlation can help identify possible contributing events,
+          but correlation alone should not be presented as proof of root cause.
+        </li>
+
+        <li>
+          Proper cable and patch-panel labeling can significantly reduce
+          troubleshooting time in multi-switch environments.
+        </li>
+
+      </ul>
+
+
+      <!-- BACK -->
+
+      <div class="article-footer">
+
+        <a href="/troubleshooting/network/">
+          ← Back to Network Troubleshooting
+        </a>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <!-- MOBILE SIDEBAR -->
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const sidebar = document.getElementById("sidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+
+</html>
