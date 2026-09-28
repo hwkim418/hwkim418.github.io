@@ -12,7 +12,10 @@
     content="A formatted numeric value caused purchase request save failures because thousand separators were passed directly to backend numeric parsing."
   >
 
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Main CSS -->
   <link rel="stylesheet" href="/css/blog.css">
 </head>
 
@@ -44,6 +47,8 @@
 
 
     <nav class="sidebar-nav">
+
+      <!-- HOME -->
 
       <a href="/" class="nav-link">
         Home
@@ -154,6 +159,8 @@
       </header>
 
 
+      <!-- TAGS -->
+
       <div class="article-tags">
         Application · Input Validation · API · Database · Troubleshooting
       </div>
@@ -173,6 +180,22 @@
         <code>Input string was not in a correct format.</code>, while
         <code>5221000</code> saved successfully.
       </p>
+
+
+      <!-- FIGURE 1 -->
+
+      <figure class="article-figure">
+
+        <img
+          src="/img/troubleshooting/numeric-parsing-unit-price-error.png"
+          alt="Example of a purchase request save failure caused by comma-formatted numeric input"
+        >
+
+        <figcaption>
+          Figure 1. Save Failure Caused by Comma-Formatted Numeric Input
+        </figcaption>
+
+      </figure>
 
 
       <!-- ROOT CAUSE -->
@@ -201,17 +224,36 @@
       <h2>Environment</h2>
 
       <ul>
-        <li><strong>Application:</strong> Internal Purchase / Import Items Web Application</li>
-        <li><strong>Field:</strong> Unit Price</li>
-        <li><strong>Backend:</strong> Application Server + Relational Database</li>
-        <li><strong>Database Column:</strong> INT / DECIMAL</li>
+
+        <li>
+          <strong>Application:</strong>
+          Internal Purchase / Import Items Web Application
+        </li>
+
+        <li>
+          <strong>Field:</strong>
+          Unit Price
+        </li>
+
+        <li>
+          <strong>Backend:</strong>
+          Application Server + Relational Database
+        </li>
+
+        <li>
+          <strong>Database Column:</strong>
+          INT / DECIMAL
+        </li>
+
       </ul>
 
 
-      <!-- TROUBLESHOOTING -->
+      <!-- TROUBLESHOOTING PROCESS -->
 
       <h2>Troubleshooting Process</h2>
 
+
+      <!-- STEP 1 -->
 
       <h3>1. Reproduce the Issue</h3>
 
@@ -229,6 +271,8 @@
       </p>
 
 
+      <!-- STEP 2 -->
+
       <h3>2. Inspect the Browser Network Payload</h3>
 
       <p>
@@ -244,6 +288,8 @@
       </p>
 
 
+      <!-- STEP 3 -->
+
       <h3>3. Review Backend Parsing</h3>
 
       <p>
@@ -258,6 +304,8 @@
       </p>
 
 
+      <!-- STEP 4 -->
+
       <h3>4. Verify the Database Layer</h3>
 
       <p>
@@ -266,9 +314,10 @@
       </p>
 
       <p>
+        <strong>What it tells us:</strong>
         The failure occurred during application-side parsing before the
-        database commit, confirming that the database was not the source of
-        the parsing error.
+        database commit. The database itself was not the source of the
+        parsing error.
       </p>
 
 
@@ -277,10 +326,10 @@
       <h2>Resolution</h2>
 
       <p>
-        The issue requires numeric input to be normalized before backend
-        numeric conversion. Formatted values such as
-        <code>5,221,000</code> should be converted into a representation the
-        application can safely parse before database processing.
+        Numeric input needs to be normalized before backend numeric conversion.
+        Formatted values such as <code>5,221,000</code> should be converted
+        into a representation the application can safely parse before database
+        processing.
       </p>
 
 
@@ -289,6 +338,7 @@
       <h2>Lessons Learned</h2>
 
       <ul>
+
         <li>
           UI formatting and backend input expectations must remain consistent.
         </li>
@@ -299,19 +349,20 @@
         </li>
 
         <li>
-          Comparing successful and failed inputs is an efficient way to isolate
+          Comparing successful and failed inputs can quickly isolate
           formatting-related problems.
         </li>
 
         <li>
-          Browser network tools can quickly reveal whether unexpected values
-          are being transmitted to an API.
+          Browser network tools can reveal exactly what values are being
+          transmitted to an API.
         </li>
 
         <li>
           Identifying the layer where a failure occurs prevents unnecessary
           database troubleshooting.
         </li>
+
       </ul>
 
 
