@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Legacy Database Environment Identified During Infrastructure Review | Kim</title>
+
+  <meta
+    name="description"
+    content="An infrastructure review identified an unsupported production database environment, limited recovery capability, and gaps in patch lifecycle management."
+  >
+
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+
+
+<body>
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button class="mobile-menu-button" id="menuButton">
+    ☰
+  </button>
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+      <a href="/" class="site-name">
+        KIM
+      </a>
+
+      <p class="site-description">
+        Tech Notes & Guides
+      </p>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <a href="/" class="nav-link">
+        Home
+      </a>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Linux</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Basics</a>
+          <a href="#">System Administration</a>
+          <a href="#">Troubleshooting</a>
+        </div>
+
+      </div>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Machine Learning</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Fundamentals</a>
+          <a href="#">Preprocessing</a>
+          <a href="#">Projects</a>
+        </div>
+
+      </div>
+
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Troubleshooting Logs</span>
+        </div>
+
+        <div class="nav-submenu">
+
+          <a href="/troubleshooting/network/">
+            Network
+          </a>
+
+          <a href="/troubleshooting/server-storage/">
+            Server / Storage
+          </a>
+
+          <a href="/troubleshooting/infrastructure/">
+            Infrastructure
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <a href="#" class="nav-link">
+        About
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="content">
+
+    <article class="article">
+
+
+      <!-- ARTICLE HEADER -->
+
+      <header class="article-header">
+
+        <div class="breadcrumb">
+          Troubleshooting / Server &amp; Storage
+        </div>
+
+        <h1>
+          Legacy Database Environment Identified During Infrastructure Review
+        </h1>
+
+        <div class="article-meta">
+          February 27, 2026
+        </div>
+
+      </header>
+
+
+      <div class="article-tags">
+        Database · Oracle · Backup · Patching · Lifecycle
+      </div>
+
+
+      <!-- OVERVIEW -->
+
+      <h2>Overview</h2>
+
+      <p>
+        During an infrastructure review, a production relational database
+        environment was found to be operating on an end-of-life operating
+        system and an end-of-life database major version.
+      </p>
+
+      <p>
+        No immediate service disruption was observed. However, the review
+        identified several operational risks involving vendor support,
+        database recovery capability, and patch management.
+      </p>
+
+
+      <!-- KEY FINDINGS -->
+
+      <div class="root-cause">
+
+        <strong>Key Findings</strong>
+
+        <p>
+          The production database was running on unsupported operating-system
+          and database versions. The database was also operating in
+          <code>NOARCHIVELOG</code> mode, limiting recovery capability, and
+          no consistent patch-review or lifecycle-tracking process was
+          identified.
+        </p>
+
+      </div>
+
+
+      <!-- WHY IT MATTERS -->
+
+      <h2>Why It Matters</h2>
+
+      <p>
+        A system can continue operating normally even when its lifecycle and
+        recovery posture has accumulated significant risk.
+      </p>
+
+      <p>
+        In this environment, the primary concerns were the loss of normal
+        vendor security updates and support for end-of-life components,
+        limited database recovery options, and insufficient visibility into
+        patch status.
+      </p>
+
+      <p>
+        The review therefore focused not on restoring a failed service, but on
+        identifying operational weaknesses before they resulted in a more
+        serious production or recovery problem.
+      </p>
+
+
+      <!-- ENVIRONMENT -->
+
+      <h2>Environment</h2>
+
+      <ul>
+
+        <li>
+          <strong>Deployment Model:</strong>
+          Virtualized server environment
+        </li>
+
+        <li>
+          <strong>Role:</strong>
+          Production relational database
+        </li>
+
+        <li>
+          <strong>Data Size:</strong>
+          Approximately 200 GB
+        </li>
+
+        <li>
+          <strong>Operating System:</strong>
+          Legacy enterprise server OS (EOL)
+        </li>
+
+        <li>
+          <strong>Database Platform:</strong>
+          Enterprise relational database (EOL major version)
+        </li>
+
+      </ul>
+
+
+      <!-- VERIFICATION PROCESS -->
+
+      <h2>Verification Process</h2>
+
+
+      <!-- STEP 1 -->
+
+      <h3>1. Verify the Database Version</h3>
+
+      <p>
+        The first step was to identify the exact Oracle database version
+        running in the production environment.
+      </p>
+
+      <pre><code>SELECT banner
+FROM v$version
+WHERE banner LIKE 'Oracle%';</code></pre>
+
+      <p>
+        The instance version and current database status were also reviewed.
+      </p>
+
+      <pre><code>SELECT version, status
+FROM v$instance;</code></pre>
+
+      <p>
+        <strong>What to look for:</strong>
+        Identify the deployed major database release and compare it with the
+        applicable vendor support lifecycle.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The deployed database major version was confirmed to be outside the
+        official vendor-supported lifecycle.
+      </p>
+
+
+      <!-- STEP 2 -->
+
+      <h3>2. Review Database Recovery Configuration</h3>
+
+      <p>
+        Database log mode was checked to understand the available recovery
+        capability.
+      </p>
+
+      <pre><code>SELECT log_mode
+FROM v$database;</code></pre>
+
+      <p>
+        The database was operating in:
+      </p>
+
+      <pre><code>NOARCHIVELOG</code></pre>
+
+      <p>
+        Flashback status was also reviewed.
+      </p>
+
+      <pre><code>SELECT flashback_on
+FROM v$database;</code></pre>
+
+      <p>
+        Archived-log history can be reviewed with:
+      </p>
+
+      <pre><code>SELECT MAX(completion_time) AS last_archivelog_time
+FROM v$archived_log;</code></pre>
+
+      <p>
+        <strong>What to look for:</strong>
+        Determine whether archived redo logs are being retained and whether
+        the database configuration supports recovery beyond the available
+        backups.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The database was operating in <code>NOARCHIVELOG</code> mode.
+        In the reviewed configuration, recovery capability was therefore
+        limited to restoration from the available full backup rather than
+        point-in-time recovery using archived redo logs.
+      </p>
+
+
+      <!-- STEP 3 -->
+
+      <h3>3. Review Patch History and Governance</h3>
+
+      <p>
+        The next step was to review the database's recorded SQL patch history.
+      </p>
+
+      <pre><code>SELECT patch_id, version, status
+FROM dba_registry_sqlpatch;</code></pre>
+
+      <p>
+        Historical database registry activity was also reviewed.
+      </p>
+
+      <pre><code>SELECT action_time, action, version, status
+FROM dba_registry_history
+ORDER BY action_time DESC;</code></pre>
+
+      <p>
+        <strong>What to look for:</strong>
+        Review installed patch history, patch status, and whether updates
+        follow a documented and repeatable review process.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        No consistent patch-review cadence was identified, and no documented
+        lifecycle or structured patch-tracking framework was observed.
+      </p>
+
+
+      <!-- ASSESSMENT -->
+
+      <h2>Assessment</h2>
+
+      <p>
+        The database was functioning at the time of the review, but operational
+        status alone did not indicate that the environment was adequately
+        supported or recoverable.
+      </p>
+
+      <p>
+        The review identified three separate areas of lifecycle risk:
+        unsupported software, limited recovery capability, and the absence of
+        a structured patch-management process.
+      </p>
+
+      <p>
+        These findings demonstrate why infrastructure reviews should evaluate
+        not only whether a service is currently available, but also whether it
+        can be securely maintained and reliably recovered.
+      </p>
+
+
+      <!-- LESSONS LEARNED -->
+
+      <h2>Lessons Learned</h2>
+
+      <ul>
+
+        <li>
+          <strong>Backup does not automatically mean recoverability.</strong>
+          Recovery capability depends on the database configuration and the
+          recovery point that the organization needs to achieve.
+        </li>
+
+        <li>
+          A production system can remain operational while running outside its
+          supported software lifecycle.
+        </li>
+
+        <li>
+          Database and operating-system lifecycle status should be reviewed
+          proactively rather than only after a failure or security incident.
+        </li>
+
+        <li>
+          Patch history is more useful when it is supported by a documented,
+          repeatable patch-review process.
+        </li>
+
+        <li>
+          Lifecycle governance is an operational responsibility, not simply a
+          compliance checkbox.
+        </li>
+
+      </ul>
+
+
+      <!-- BACK -->
+
+      <div class="article-footer">
+
+        <a href="/troubleshooting/server-storage/">
+          ← Back to Server / Storage
+        </a>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <!-- MOBILE SIDEBAR -->
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const sidebar = document.getElementById("sidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+
+</html>
