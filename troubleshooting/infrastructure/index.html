@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Infrastructure Troubleshooting | Kim</title>
+
+  <meta
+    name="description"
+    content="Real-world infrastructure troubleshooting notes covering applications, systems, operational issues, and cross-layer technical problems."
+  >
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+
+
+<body>
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button class="mobile-menu-button" id="menuButton">
+    ☰
+  </button>
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+      <a href="/" class="site-name">
+        KIM
+      </a>
+
+      <p class="site-description">
+        Tech Notes & Guides
+      </p>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <!-- HOME -->
+
+      <a href="/" class="nav-link">
+        Home
+      </a>
+
+
+      <!-- LINUX -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Linux</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Basics</a>
+          <a href="#">System Administration</a>
+          <a href="#">Troubleshooting</a>
+        </div>
+
+      </div>
+
+
+      <!-- MACHINE LEARNING -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Machine Learning</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Fundamentals</a>
+          <a href="#">Preprocessing</a>
+          <a href="#">Projects</a>
+        </div>
+
+      </div>
+
+
+      <!-- TROUBLESHOOTING LOGS -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Troubleshooting Logs</span>
+        </div>
+
+        <div class="nav-submenu">
+
+          <a href="/troubleshooting/network/">
+            Network
+          </a>
+
+          <a href="/troubleshooting/server-storage/">
+            Server / Storage
+          </a>
+
+          <a href="/troubleshooting/infrastructure/">
+            Infrastructure
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- ABOUT -->
+
+      <a href="/about.html" class="nav-link">
+        About
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="content">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+      <p class="eyebrow">
+        TROUBLESHOOTING LOGS
+      </p>
+
+      <h1>
+        Infrastructure Troubleshooting
+      </h1>
+
+      <p class="hero-description">
+        Real-world notes from diagnosing application, system, and
+        infrastructure issues and identifying their root causes.
+      </p>
+
+    </section>
+
+
+    <!-- POSTS -->
+
+    <section class="posts-section">
+
+      <div class="section-header">
+        <h2>Posts</h2>
+      </div>
+
+
+      <!-- POST 1 -->
+
+      <article class="post-card">
+
+        <div class="post-meta">
+
+          <span class="category">
+            Infrastructure
+          </span>
+
+          <span>
+            February 27, 2026
+          </span>
+
+        </div>
+
+
+        <h3>
+          <a href="/troubleshooting/infrastructure/numeric-parsing-unit-price.html">
+            Numeric Parsing Failure in Unit Price Field
+          </a>
+        </h3>
+
+
+        <p>
+          Comma-formatted numeric input was passed directly to the backend,
+          causing a parsing failure before the value could be committed
+          to the database.
+        </p>
+
+
+        <a
+          href="/troubleshooting/infrastructure/numeric-parsing-unit-price.html"
+          class="read-more"
+        >
+          Read article →
+        </a>
+
+      </article>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="main-footer">
+      © 2026 Kim
+    </footer>
+
+  </main>
+
+
+  <!-- MOBILE SIDEBAR -->
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const sidebar = document.getElementById("sidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+
+</html>
