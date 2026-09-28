@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Numeric Parsing Failure in Unit Price Field | Kim</title>
+
+  <meta
+    name="description"
+    content="A formatted numeric value caused purchase request save failures because thousand separators were passed directly to backend numeric parsing."
+  >
+
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+
+
+<body>
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button class="mobile-menu-button" id="menuButton">
+    ☰
+  </button>
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+      <a href="/" class="site-name">
+        KIM
+      </a>
+
+      <p class="site-description">
+        Tech Notes & Guides
+      </p>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <a href="/" class="nav-link">
+        Home
+      </a>
+
+
+      <!-- LINUX -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Linux</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Basics</a>
+          <a href="#">System Administration</a>
+          <a href="#">Troubleshooting</a>
+        </div>
+
+      </div>
+
+
+      <!-- MACHINE LEARNING -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Machine Learning</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Fundamentals</a>
+          <a href="#">Preprocessing</a>
+          <a href="#">Projects</a>
+        </div>
+
+      </div>
+
+
+      <!-- TROUBLESHOOTING LOGS -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Troubleshooting Logs</span>
+        </div>
+
+        <div class="nav-submenu">
+
+          <a href="/troubleshooting/network/">
+            Network
+          </a>
+
+          <a href="/troubleshooting/server-storage/">
+            Server / Storage
+          </a>
+
+          <a href="/troubleshooting/infrastructure/">
+            Infrastructure
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- ABOUT -->
+
+      <a href="/about.html" class="nav-link">
+        About
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="content">
+
+    <article class="article">
+
+
+      <!-- ARTICLE HEADER -->
+
+      <header class="article-header">
+
+        <div class="breadcrumb">
+          Troubleshooting / Infrastructure
+        </div>
+
+        <h1>
+          Numeric Parsing Failure in Unit Price Field
+        </h1>
+
+        <div class="article-meta">
+          February 27, 2026
+        </div>
+
+      </header>
+
+
+      <div class="article-tags">
+        Application · Input Validation · API · Database · Troubleshooting
+      </div>
+
+
+      <!-- OVERVIEW -->
+
+      <h2>Overview</h2>
+
+      <p>
+        Users were unable to save purchase requests when entering
+        comma-formatted values in the Unit Price field.
+      </p>
+
+      <p>
+        For example, <code>5,221,000</code> failed with the message
+        <code>Input string was not in a correct format.</code>, while
+        <code>5221000</code> saved successfully.
+      </p>
+
+
+      <!-- ROOT CAUSE -->
+
+      <div class="root-cause">
+
+        <strong>Root Cause</strong>
+
+        <p>
+          The UI transmitted the formatted value
+          <code>5,221,000</code> directly to the API. The backend attempted
+          to parse the string as a numeric value without removing the
+          thousand separators or applying culture-aware parsing.
+        </p>
+
+        <p>
+          The conversion therefore failed in the application layer before
+          the value could be committed to the database.
+        </p>
+
+      </div>
+
+
+      <!-- ENVIRONMENT -->
+
+      <h2>Environment</h2>
+
+      <ul>
+        <li><strong>Application:</strong> Internal Purchase / Import Items Web Application</li>
+        <li><strong>Field:</strong> Unit Price</li>
+        <li><strong>Backend:</strong> Application Server + Relational Database</li>
+        <li><strong>Database Column:</strong> INT / DECIMAL</li>
+      </ul>
+
+
+      <!-- TROUBLESHOOTING -->
+
+      <h2>Troubleshooting Process</h2>
+
+
+      <h3>1. Reproduce the Issue</h3>
+
+      <p>
+        The same numeric value was tested with and without thousand separators.
+      </p>
+
+      <pre><code>5221000    → Success
+5,221,000  → Failure</code></pre>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The numeric value itself was valid. The failure was associated with
+        its formatted representation.
+      </p>
+
+
+      <h3>2. Inspect the Browser Network Payload</h3>
+
+      <p>
+        The request payload was inspected using the browser's developer tools.
+      </p>
+
+      <pre><code>"5,221,000"</code></pre>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The commas were not removed by the UI. The formatted string was being
+        sent directly to the API.
+      </p>
+
+
+      <h3>3. Review Backend Parsing</h3>
+
+      <p>
+        Backend processing showed direct string-to-numeric conversion without
+        comma stripping or culture-aware input handling.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The application expected a raw numeric value but received a formatted
+        string containing thousand separators.
+      </p>
+
+
+      <h3>4. Verify the Database Layer</h3>
+
+      <p>
+        The database schema was reviewed to confirm that the Unit Price column
+        used a numeric data type.
+      </p>
+
+      <p>
+        The failure occurred during application-side parsing before the
+        database commit, confirming that the database was not the source of
+        the parsing error.
+      </p>
+
+
+      <!-- RESOLUTION -->
+
+      <h2>Resolution</h2>
+
+      <p>
+        The issue requires numeric input to be normalized before backend
+        numeric conversion. Formatted values such as
+        <code>5,221,000</code> should be converted into a representation the
+        application can safely parse before database processing.
+      </p>
+
+
+      <!-- LESSONS LEARNED -->
+
+      <h2>Lessons Learned</h2>
+
+      <ul>
+        <li>
+          UI formatting and backend input expectations must remain consistent.
+        </li>
+
+        <li>
+          Numeric input should be normalized or parsed appropriately before
+          conversion.
+        </li>
+
+        <li>
+          Comparing successful and failed inputs is an efficient way to isolate
+          formatting-related problems.
+        </li>
+
+        <li>
+          Browser network tools can quickly reveal whether unexpected values
+          are being transmitted to an API.
+        </li>
+
+        <li>
+          Identifying the layer where a failure occurs prevents unnecessary
+          database troubleshooting.
+        </li>
+      </ul>
+
+
+      <!-- BACK -->
+
+      <div class="article-footer">
+
+        <a href="/troubleshooting/infrastructure/">
+          ← Back to Infrastructure Troubleshooting
+        </a>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <!-- MOBILE SIDEBAR -->
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const sidebar = document.getElementById("sidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+
+</html>
