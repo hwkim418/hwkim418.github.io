@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Barcode Scan Failure Due to Hidden Carriage Return Character | Kim</title>
+
+  <meta
+    name="description"
+    content="A barcode scanner successfully read barcode data but validation failed because a hidden carriage return character was automatically appended to the scanned input."
+  >
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+
+
+<body>
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button class="mobile-menu-button" id="menuButton">
+    ☰
+  </button>
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+      <a href="/" class="site-name">
+        KIM
+      </a>
+
+      <p class="site-description">
+        Tech Notes & Guides
+      </p>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <!-- HOME -->
+
+      <a href="/" class="nav-link">
+        Home
+      </a>
+
+
+      <!-- LINUX -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Linux</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Basics</a>
+          <a href="#">System Administration</a>
+          <a href="#">Troubleshooting</a>
+        </div>
+
+      </div>
+
+
+      <!-- MACHINE LEARNING -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Machine Learning</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Fundamentals</a>
+          <a href="#">Preprocessing</a>
+          <a href="#">Projects</a>
+        </div>
+
+      </div>
+
+
+      <!-- TROUBLESHOOTING LOGS -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Troubleshooting Logs</span>
+        </div>
+
+        <div class="nav-submenu">
+
+          <a href="/troubleshooting/network/">
+            Network
+          </a>
+
+          <a href="/troubleshooting/server-storage/">
+            Server / Storage
+          </a>
+
+          <a href="/troubleshooting/infrastructure/">
+            Infrastructure
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- ABOUT -->
+
+      <a href="/about.html" class="nav-link">
+        About
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="content">
+
+    <article class="article">
+
+
+      <!-- ARTICLE HEADER -->
+
+      <header class="article-header">
+
+        <div class="breadcrumb">
+          Troubleshooting / Infrastructure
+        </div>
+
+        <h1>
+          Barcode Scan Failure Due to Hidden Carriage Return Character
+        </h1>
+
+        <div class="article-meta">
+          March 19, 2026
+        </div>
+
+      </header>
+
+
+      <!-- TAGS -->
+
+      <div class="article-tags">
+        Barcode · Scanner · Input Validation · Troubleshooting · Hardware
+      </div>
+
+
+      <!-- OVERVIEW -->
+
+      <h2>Overview</h2>
+
+      <p>
+        Users were able to scan barcode data successfully, but the
+        Intellicheck application consistently returned a
+        <code>Failed</code> result.
+      </p>
+
+      <p>
+        The barcode itself was read correctly. However, the scanner was
+        automatically appending a hidden carriage return character to the
+        scanned value, causing application validation to fail.
+      </p>
+
+
+      <!-- ROOT CAUSE -->
+
+      <div class="root-cause">
+
+        <strong>Root Cause</strong>
+
+        <p>
+          The barcode scanner was configured to automatically append a
+          Carriage Return (<code>\r</code>) suffix after each scanned value.
+        </p>
+
+        <p>
+          Although the extra character was not visible in the application,
+          it became part of the transmitted input and caused the validation
+          process to reject otherwise valid barcode data.
+        </p>
+
+      </div>
+
+
+      <!-- ENVIRONMENT -->
+
+      <h2>Environment</h2>
+
+      <ul>
+
+        <li>
+          <strong>Scanner:</strong>
+          Honeywell Xenon XP 1950G-HD (High Density) 2D Barcode Scanner
+        </li>
+
+        <li>
+          <strong>Interface:</strong>
+          USB Keyboard Emulation
+        </li>
+
+        <li>
+          <strong>Application:</strong>
+          Intellicheck Desktop Application
+        </li>
+
+        <li>
+          <strong>Input:</strong>
+          Barcode / ID Scan Data
+        </li>
+
+      </ul>
+
+
+      <!-- TROUBLESHOOTING PROCESS -->
+
+      <h2>Troubleshooting Process</h2>
+
+
+      <!-- STEP 1 -->
+
+      <h3>1. Reproduce the Failure</h3>
+
+      <p>
+        The barcode was scanned normally. The scanner successfully read the
+        barcode, but the application returned a
+        <code>Failed</code> result.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The scanner was capable of reading the barcode, so the investigation
+        needed to look beyond a basic scanning or hardware failure.
+      </p>
+
+
+      <!-- STEP 2 -->
+
+      <h3>2. Inspect the Scanned Input</h3>
+
+      <p>
+        Developer tools were used to inspect the data generated by the scan.
+        An unexpected hidden character was identified at the end of the
+        barcode value.
+      </p>
+
+      <p>
+        Conceptually, the application was receiving:
+      </p>
+
+      <pre><code>Expected:
+123456789
+
+Received:
+123456789\r</code></pre>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The visible barcode value did not represent the complete input being
+        transmitted to the application.
+      </p>
+
+
+      <!-- STEP 3 -->
+
+      <h3>3. Identify the Hidden Character</h3>
+
+      <p>
+        The unexpected character suggested that the scanner might be adding
+        a non-visible control character after each scan.
+      </p>
+
+      <p>
+        Vendor information confirmed that an additional
+        Carriage Return (<code>\r</code>) was being appended by the scanner
+        configuration.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The validation failure was related to scanner input configuration,
+        rather than an incorrect barcode value.
+      </p>
+
+
+      <!-- STEP 4 -->
+
+      <h3>4. Verify the Scanner Suffix Configuration</h3>
+
+      <p>
+        The scanner's suffix configuration was identified as the source of
+        the additional character.
+      </p>
+
+      <pre><code>Barcode Value + Carriage Return (\r)
+                     ↓
+              Application Input
+                     ↓
+              Validation Failure</code></pre>
+
+      <p>
+        <strong>What it tells us:</strong>
+        Hardware configuration can modify application input even when the
+        value displayed to the user appears correct.
+      </p>
+
+
+      <!-- RESOLUTION -->
+
+      <h2>Resolution</h2>
+
+      <p>
+        The scanner's configuration barcode for
+        <strong>Remove Suffix</strong> was scanned to remove the automatically
+        appended Carriage Return character.
+      </p>
+
+      <p>
+        After the configuration change, the barcode was scanned again.
+        The application processed the scan successfully and the issue was
+        resolved.
+      </p>
+
+
+      <!-- LESSONS LEARNED -->
+
+      <h2>Lessons Learned</h2>
+
+      <ul>
+
+        <li>
+          Barcode scanners may append hidden control characters such as
+          CR or LF by default.
+        </li>
+
+        <li>
+          Data visible in the UI may not represent every character actually
+          transmitted to the application.
+        </li>
+
+        <li>
+          Peripheral hardware configuration can directly affect application
+          behavior.
+        </li>
+
+        <li>
+          When scanning works but validation fails, inspect the actual input
+          before assuming the scanner hardware is defective.
+        </li>
+
+      </ul>
+
+
+      <!-- BACK -->
+
+      <div class="article-footer">
+
+        <a href="/troubleshooting/infrastructure/">
+          ← Back to Infrastructure Troubleshooting
+        </a>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <!-- MOBILE SIDEBAR -->
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const sidebar = document.getElementById("sidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+
+</html>
