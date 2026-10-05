@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Oracle Database Server Recovery After Unexpected Power Shutdown | Kim</title>
+
+  <meta
+    name="description"
+    content="An unexpected power-related shutdown left an Oracle production database unavailable and unable to recover through a standard reboot, requiring database-level intervention."
+  >
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+
+
+<body>
+
+  <!-- MOBILE MENU BUTTON -->
+
+  <button class="mobile-menu-button" id="menuButton">
+    ☰
+  </button>
+
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+
+      <a href="/" class="site-name">
+        KIM
+      </a>
+
+      <p class="site-description">
+        Tech Notes & Guides
+      </p>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <!-- HOME -->
+
+      <a href="/" class="nav-link">
+        Home
+      </a>
+
+
+      <!-- LINUX -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Linux</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Basics</a>
+          <a href="#">System Administration</a>
+          <a href="#">Troubleshooting</a>
+        </div>
+
+      </div>
+
+
+      <!-- MACHINE LEARNING -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Machine Learning</span>
+        </div>
+
+        <div class="nav-submenu">
+          <a href="#">Fundamentals</a>
+          <a href="#">Preprocessing</a>
+          <a href="#">Projects</a>
+        </div>
+
+      </div>
+
+
+      <!-- TROUBLESHOOTING LOGS -->
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">
+          <span>Troubleshooting Logs</span>
+        </div>
+
+        <div class="nav-submenu">
+
+          <a href="/troubleshooting/network/">
+            Network
+          </a>
+
+          <a href="/troubleshooting/server-storage/">
+            Server / Storage
+          </a>
+
+          <a href="/troubleshooting/infrastructure/">
+            Infrastructure
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- ABOUT -->
+
+      <a href="/about.html" class="nav-link">
+        About
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="content">
+
+    <article class="article">
+
+
+      <!-- ARTICLE HEADER -->
+
+      <header class="article-header">
+
+        <div class="breadcrumb">
+          Troubleshooting / Server &amp; Storage
+        </div>
+
+        <h1>
+          Oracle Database Server Recovery After Unexpected Power Shutdown
+        </h1>
+
+        <div class="article-meta">
+          March 24, 2026
+        </div>
+
+      </header>
+
+
+      <!-- TAGS -->
+
+      <div class="article-tags">
+        Oracle · Database · Recovery · Power Failure · Production
+      </div>
+
+
+      <!-- OVERVIEW -->
+
+      <h2>Overview</h2>
+
+      <p>
+        An Oracle production database became unavailable following an
+        unexpected power-related shutdown.
+      </p>
+
+      <p>
+        The outage affected multiple production systems, including POP,
+        EDI, and Ecoat printers. A standard system reboot did not restore
+        database operation, requiring database-level intervention.
+      </p>
+
+
+      <!-- ROOT CAUSE -->
+
+      <div class="root-cause">
+
+        <strong>Root Cause</strong>
+
+        <p>
+          Following the unexpected power-related shutdown, the Oracle
+          database remained in a locked or inconsistent state and could
+          not recover through standard reboot procedures.
+        </p>
+
+        <p>
+          Database-level intervention was required to clear the lock
+          condition and restore normal service.
+        </p>
+
+      </div>
+
+
+      <!-- ENVIRONMENT -->
+
+      <h2>Environment</h2>
+
+      <ul>
+
+        <li>
+          <strong>Environment:</strong>
+          On-Premise Production Server
+        </li>
+
+        <li>
+          <strong>Database:</strong>
+          Oracle Relational Database
+        </li>
+
+        <li>
+          <strong>Operation:</strong>
+          24/7 Manufacturing
+        </li>
+
+        <li>
+          <strong>Impacted Systems:</strong>
+          POP, EDI, and Ecoat Printers
+        </li>
+
+      </ul>
+
+
+      <!-- TROUBLESHOOTING PROCESS -->
+
+      <h2>Troubleshooting / Verification Process</h2>
+
+
+      <!-- STEP 1 -->
+
+      <h3>1. Confirm the Production Impact</h3>
+
+      <p>
+        POP, EDI, and Ecoat systems were checked and confirmed to be
+        unresponsive.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The problem was affecting multiple production services rather
+        than a single workstation or application.
+      </p>
+
+
+      <!-- STEP 2 -->
+
+      <h3>2. Verify Oracle Database Operation</h3>
+
+      <p>
+        The Oracle database service was checked and confirmed to be
+        operating abnormally.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The database layer was directly involved in the production
+        service interruption.
+      </p>
+
+
+      <!-- STEP 3 -->
+
+      <h3>3. Attempt Standard System Recovery</h3>
+
+      <p>
+        A system reboot was performed as an initial recovery attempt.
+      </p>
+
+      <pre><code>System Reboot
+     ↓
+Oracle Database Still Unavailable</code></pre>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The incident could not be resolved through a normal operating
+        system restart.
+      </p>
+
+
+      <!-- STEP 4 -->
+
+      <h3>4. Escalate for Database-Level Intervention</h3>
+
+      <p>
+        Because the issue persisted after the reboot, the incident was
+        escalated to an Oracle developer for database-level investigation
+        and recovery.
+      </p>
+
+      <p>
+        A database lock condition was identified and cleared.
+      </p>
+
+      <p>
+        <strong>What it tells us:</strong>
+        The recovery required intervention at the database level rather
+        than another server reboot.
+      </p>
+
+
+      <!-- RESOLUTION -->
+
+      <h2>Resolution</h2>
+
+      <p>
+        The Oracle developer cleared the database lock condition.
+        Following the database-level intervention, the affected services
+        were successfully restored.
+      </p>
+
+      <pre><code>Unexpected Power Shutdown
+          ↓
+Oracle Database Unavailable
+          ↓
+Standard Reboot
+          ↓
+Issue Persists
+          ↓
+Database-Level Intervention
+          ↓
+Database Lock Cleared
+          ↓
+Services Restored</code></pre>
+
+
+      <!-- PREVENTIVE ACTION -->
+
+      <h2>Preventive Action</h2>
+
+      <p>
+        A UPS installation was scheduled for the first week of April to
+        improve power fault tolerance and reduce the risk of recurrence
+        from sudden power loss.
+      </p>
+
+
+      <!-- LESSONS LEARNED -->
+
+      <h2>Lessons Learned</h2>
+
+      <ul>
+
+        <li>
+          Unexpected power loss during active database operations can
+          leave Oracle in a state that requires database-level recovery.
+        </li>
+
+        <li>
+          A server reboot does not necessarily equal database recovery.
+        </li>
+
+        <li>
+          Power stability is a critical dependency for production
+          database reliability.
+        </li>
+
+        <li>
+          Recovery capability should be planned alongside system uptime
+          requirements.
+        </li>
+
+        <li>
+          Critical production infrastructure should include appropriate
+          protection against sudden power loss.
+        </li>
+
+      </ul>
+
+
+      <!-- BACK -->
+
+      <div class="article-footer">
+
+        <a href="/troubleshooting/server-storage/">
+          ← Back to Server / Storage Troubleshooting
+        </a>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <!-- MOBILE SIDEBAR -->
+
+  <script>
+    const menuButton = document.getElementById("menuButton");
+    const sidebar = document.getElementById("sidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+
+</html>
